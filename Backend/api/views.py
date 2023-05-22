@@ -6,7 +6,7 @@ from system.models import RegisterUser
 from django.contrib.auth.hashers import make_password
 
 # Create your views here.
-class RegisterUser(APIView):
+class RegisterUsers(APIView):
 
     def post(self, request):
         data=request.data
@@ -27,7 +27,7 @@ class RegisterUser(APIView):
             new_user.save()
             signupUser=User.objects.create(username=username,email=email,password=password)
             signupUser.save()
-            return Response({'error','User created successfully'},status=status.HTTP_201_CREATED)
+            return Response({'success':'User created successfully'},status=status.HTTP_201_CREATED)
 
         except:
             return Response({'error':'An internal database error occurred'},status=status.HTTP_400_BAD_REQUEST)

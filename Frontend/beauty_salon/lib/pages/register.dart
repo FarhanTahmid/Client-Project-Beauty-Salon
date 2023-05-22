@@ -1,7 +1,5 @@
-
 import 'package:beauty_salon/pages/home_page.dart';
 import 'package:flutter/material.dart';
-
 
 class MyRegister extends StatefulWidget {
   const MyRegister({Key? key}) : super(key: key);
@@ -11,8 +9,15 @@ class MyRegister extends StatefulWidget {
 }
 
 class _MyRegisterState extends State<MyRegister> {
+  final nameController = TextEditingController();
+  final usernameController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
 
-  
+  void signup() async{
+    
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -48,6 +53,7 @@ class _MyRegisterState extends State<MyRegister> {
                       child: Column(
                         children: [
                           TextField(
+                            controller:nameController ,
                             style: TextStyle(color: Colors.white),
                             decoration: InputDecoration(
                                 enabledBorder: OutlineInputBorder(
@@ -72,6 +78,32 @@ class _MyRegisterState extends State<MyRegister> {
                             height: 30,
                           ),
                           TextField(
+                            controller: usernameController,
+                            style: TextStyle(color: Colors.white),
+                            decoration: InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                hintText: "Username",
+                                hintStyle: TextStyle(color: Colors.white),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                )),
+                          ),
+                          SizedBox(
+                            height: 30,
+                          ),
+                          TextField(
+                            controller: emailController,
                             style: TextStyle(color: Colors.white),
                             decoration: InputDecoration(
                                 enabledBorder: OutlineInputBorder(
@@ -96,6 +128,7 @@ class _MyRegisterState extends State<MyRegister> {
                             height: 30,
                           ),
                           TextField(
+                            controller: passwordController,
                             style: TextStyle(color: Colors.white),
                             obscureText: true,
                             decoration: InputDecoration(
@@ -117,9 +150,6 @@ class _MyRegisterState extends State<MyRegister> {
                                   borderRadius: BorderRadius.circular(10),
                                 )),
                           ),
-
-                           
-
                           SizedBox(
                             height: 40,
                           ),
@@ -138,8 +168,7 @@ class _MyRegisterState extends State<MyRegister> {
                                 backgroundColor: Color(0xff4c505b),
                                 child: IconButton(
                                     color: Colors.white,
-                                    onPressed: () async {},
-                                    
+                                    onPressed: signup,
                                     icon: Icon(
                                       Icons.arrow_forward,
                                     )),
@@ -154,7 +183,10 @@ class _MyRegisterState extends State<MyRegister> {
                             children: [
                               TextButton(
                                 onPressed: () {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => HomePage()));
                                 },
                                 child: Text(
                                   'Go to HomePage',
