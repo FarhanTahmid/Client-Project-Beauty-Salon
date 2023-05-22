@@ -1,5 +1,10 @@
 import 'package:beauty_salon/pages/home_page.dart';
+import 'package:beauty_salon/pages/login_page.dart';
 import 'package:flutter/material.dart';
+import 'package:beauty_salon/backend.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
+
 
 class MyRegister extends StatefulWidget {
   const MyRegister({Key? key}) : super(key: key);
@@ -14,8 +19,57 @@ class _MyRegisterState extends State<MyRegister> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  void signup() async{
-    
+  void signup() async {
+  //   Backend backend = Backend();
+  //   String backendMeta = backend.backendServerMeta;
+  //   final String signupUrl = "$backendMeta/api/signup";
+
+  //   try {
+  //     var response = await http.post(Uri.parse(signupUrl), body: {
+  //       'username': usernameController.text.trim(),
+  //       'name': nameController.text.trim(),
+  //       'password': passwordController.text.trim(),
+  //       'email': emailController.text.trim()
+  //     });
+  //     if ((response.statusCode) == 400) {
+  //       Fluttertoast.showToast(
+  //         msg: "This username already exists! Try logging in",
+  //         toastLength: Toast.LENGTH_SHORT,
+  //         gravity: ToastGravity.BOTTOM,
+  //         timeInSecForIosWeb: 1,
+  //         backgroundColor: Colors.grey[700],
+  //         textColor: Colors.white,
+  //         fontSize: 16.0,
+  //       );
+        
+  //     }
+  //     else if ((response.statusCode) == 201) {
+        
+  //       Fluttertoast.showToast(
+  //         msg: "Signed up successfully",
+  //         toastLength: Toast.LENGTH_SHORT,
+  //         gravity: ToastGravity.BOTTOM,
+  //         timeInSecForIosWeb: 1,
+  //         backgroundColor: Colors.grey[700],
+  //         textColor: Colors.white,
+  //         fontSize: 16.0,
+  //       );
+  //       Navigator.push(
+  //         context,
+  //         MaterialPageRoute(builder: (context) => LoginPage()),
+  //       );
+  //     }
+  //   } catch (e) {
+  //     Fluttertoast.showToast(
+  //         msg: "Please check your network connection and Try again!",
+  //         toastLength: Toast.LENGTH_SHORT,
+  //         gravity: ToastGravity.BOTTOM,
+  //         timeInSecForIosWeb: 1,
+  //         backgroundColor: Colors.grey[700],
+  //         textColor: Colors.white,
+  //         fontSize: 16.0,
+  //       );
+  //   }
   }
 
   @override
@@ -53,7 +107,7 @@ class _MyRegisterState extends State<MyRegister> {
                       child: Column(
                         children: [
                           TextField(
-                            controller:nameController ,
+                            controller: nameController,
                             style: TextStyle(color: Colors.white),
                             decoration: InputDecoration(
                                 enabledBorder: OutlineInputBorder(
