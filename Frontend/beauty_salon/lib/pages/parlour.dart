@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:beauty_salon/backend.dart';
 import 'package:beauty_salon/pages/bookParlorPage.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:io';
 
 class Parlour extends StatefulWidget {
-  const Parlour({Key? key}) : super(key: key);
+  final String username;
+  const Parlour({Key? key,required this.username}) : super(key: key);
 
   @override
   State<Parlour> createState() => _ParlourState();
@@ -25,34 +28,53 @@ class _ParlourState extends State<Parlour> {
   }
 
   Future<void> getRegisteredParlors() async {
+    var response;
     Backend backend = Backend();
     String serverMeta = backend.backendServerMeta;
     var getSalonsUrl = Uri.parse('$serverMeta/api/beautysalons');
-    var response = await http.get(getSalonsUrl);
-    if (response.statusCode == 200) {
-      var jsonResponse = jsonDecode(response.body);
+    try {
+      response = await http.get(getSalonsUrl);
+      if (response.statusCode == 200) {
+        var jsonResponse = jsonDecode(response.body);
 
-      setState(() {
-        salonNames.clear();
-        salonIds.clear();
-        salonMotto.clear();
-        saloncontactNo.clear();
+        setState(() {
+          salonNames.clear();
+          salonIds.clear();
+          salonMotto.clear();
+          saloncontactNo.clear();
 
-        jsonResponse['name'].forEach((key, value) {
-          salonNames.add(value);
-        });
-        jsonResponse['name'].forEach((key, value) {
-          salonIds.add(key);
-        });
+          jsonResponse['name'].forEach((key, value) {
+            salonNames.add(value);
+          });
+          jsonResponse['name'].forEach((key, value) {
+            salonIds.add(key);
+          });
 
-        jsonResponse['motto'].forEach((key, value) {
-          salonMotto.add(value);
-        });
+          jsonResponse['motto'].forEach((key, value) {
+            salonMotto.add(value);
+          });
 
-        jsonResponse['contact'].forEach((key, value) {
-          saloncontactNo.add(value);
+          jsonResponse['contact'].forEach((key, value) {
+            saloncontactNo.add(value);
+          });
         });
-      });
+      }
+    } catch (e) {
+      if (Platform.isAndroid) {
+        Fluttertoast.showToast(
+          msg: "Please check your internet connection and Try again.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.grey[700],
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+      } else if (Platform.isWindows) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Please check your internet connection and Try again."),
+        ));
+      }
     }
   }
 
@@ -127,6 +149,8 @@ class _ParlourState extends State<Parlour> {
                       MaterialPageRoute(
                         builder: (context) => BookingPage(
                           parlorPrimaryKey: salonIds[salonIndex],
+                          username: widget.username,
+                          parlorName: salonName,
                         ),
                       ),
                     );
@@ -141,4 +165,3 @@ class _ParlourState extends State<Parlour> {
     );
   }
 }
-
