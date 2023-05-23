@@ -1,7 +1,9 @@
-import 'dart:ui';
+import 'dart:convert';
+import 'package:beauty_salon/backend.dart';
 import 'package:beauty_salon/pages/parlour.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   final String username;
@@ -12,9 +14,25 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String name = '';
+  String email = '';
+  Future<void> getUserDetails() async {
+    var response;
+    String username = widget.username;
+    Backend backend = Backend();
+    String serverMeta = backend.backendServerMeta;
+    var getUserUrl = Uri.parse("$serverMeta/api/user_details/$username");
+    response = await http.get(getUserUrl);
+    if (response.statusCode == 200) {
+      var jsonResponse = jsonDecode(response.body);
+      name = jsonResponse['name'];
+      email = jsonResponse['email'];
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    
+    getUserDetails();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.pinkAccent,
@@ -56,8 +74,8 @@ class _HomePageState extends State<HomePage> {
                 margin: EdgeInsets.zero,
                 child: UserAccountsDrawerHeader(
                   margin: EdgeInsets.zero,
-                  accountName: Text(" Beauty Salon"),
-                  accountEmail: Text("beauty.salon@gmail.com"),
+                  accountName: Text(name),
+                  accountEmail: Text(email),
                   currentAccountPicture: CircleAvatar(
                     backgroundImage: AssetImage(
                       ('assets/images/22.jpg'),
@@ -66,7 +84,9 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               ListTile(
-                onTap: () {},
+                onTap: () {
+                  Navigator.pop(context);
+                },
                 leading: Icon(
                   CupertinoIcons.home,
                   color: Colors.white,
@@ -111,7 +131,10 @@ class _HomePageState extends State<HomePage> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Parlour(username: widget.username,)),
+                    MaterialPageRoute(
+                        builder: (context) => Parlour(
+                              username: widget.username,
+                            )),
                   );
                 },
                 leading: Icon(
@@ -120,6 +143,16 @@ class _HomePageState extends State<HomePage> {
                 ),
                 title: Text(
                   "Parlours",
+                  textScaleFactor: 1.2,
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              ListTile(
+                onTap: () {},
+                title: Text(
+                  "Logout",
                   textScaleFactor: 1.2,
                   style: TextStyle(
                     color: Colors.white,

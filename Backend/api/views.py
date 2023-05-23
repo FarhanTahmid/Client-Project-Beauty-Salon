@@ -46,6 +46,12 @@ class Login(APIView):
             return Response({'success': 'Logged in successfully','username':username}, status=status.HTTP_202_ACCEPTED)
         else:
             return Response({'error': 'Login unsuccessful'}, status=status.HTTP_401_UNAUTHORIZED)
+class GetUserDetails(APIView):
+    def get(self,request,username):
+        
+        userDetails=RegisterUser.objects.get(username=username)
+        return Response({'success':"Getting User data",'name':userDetails.name,
+                         'email':userDetails.email},status=status.HTTP_200_OK)
 
 class Salons(APIView):
     def get(self,request):
@@ -57,7 +63,7 @@ class Salons(APIView):
             parlorNameDict.update({salon.pk:salon.parlorName})
             parlorMottoDict.update({salon.pk:salon.motto})
             parlorContactNoDict.update({salon.pk:salon.contact_no})
-        return Response({'success':"Getting Beaut Salons",'name':parlorNameDict,'motto':parlorMottoDict,'contact':parlorContactNoDict},status=status.HTTP_200_OK)
+        return Response({'success':"Getting Beauty Salons",'name':parlorNameDict,'motto':parlorMottoDict,'contact':parlorContactNoDict},status=status.HTTP_200_OK)
 
 class BookingRegistration(APIView):
     def post(self,request):
