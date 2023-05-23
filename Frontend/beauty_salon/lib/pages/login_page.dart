@@ -5,10 +5,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:beauty_salon/pages/home_page.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
+import 'dart:convert';
 
 class LoginPage extends StatefulWidget {
-  //const LoginPage({super.key});
-
+  const LoginPage({super.key});
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
@@ -16,6 +16,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
+  String username = '';
 
   void login() async {
     Backend backend = Backend();
@@ -28,6 +29,8 @@ class _LoginPageState extends State<LoginPage> {
         'password': passwordController.text.trim()
       });
       if (response.statusCode == 202) {
+        var jsonResponse = jsonDecode(response.body);
+        username = jsonResponse['username'];
         if (Platform.isAndroid) {
           Fluttertoast.showToast(
             msg: "User Loggedin Successfully",
@@ -45,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
         }
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => HomePage()),
+          MaterialPageRoute(builder: (context) => HomePage(username: username,)),
         );
       } else if (response.statusCode == 401) {
         if (Platform.isAndroid) {

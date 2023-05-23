@@ -1,4 +1,10 @@
+import 'dart:io';
+import 'dart:convert';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
+import 'package:beauty_salon/backend.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 enum HairCutEnum { LairCut, BobCut, FrenchCut }
 
@@ -20,7 +26,13 @@ enum GenderEnum { Male, Female }
 
 class BookingPage extends StatefulWidget {
   final String parlorPrimaryKey;
-  const BookingPage({super.key, required this.parlorPrimaryKey});
+  final String parlorName;
+  final String username;
+  const BookingPage(
+      {super.key,
+      required this.parlorPrimaryKey,
+      required this.username,
+      required this.parlorName});
 
   @override
   State<BookingPage> createState() => _BookingPageState();
@@ -37,9 +49,110 @@ class _BookingPageState extends State<BookingPage> {
   ServiceEnum? _serviceEnum;
   GenderEnum? _genderEnum;
 
+  var nameController = TextEditingController();
+  var emailController = TextEditingController();
+  var contactNoController = TextEditingController();
+  var adressController = TextEditingController();
+
+  void getBookingDetails() async {
+    // Getting values extracted from the enums
+
+    String hairCutValue = _hairCutEnum.toString();
+    String hairCut = hairCutValue.split('.').last;
+
+    String hairTreatmentValue = _hairTreatmentEnum.toString();
+    String hairTreatment = hairTreatmentValue.split('.').last;
+
+    String facialValue = _facialEnum.toString();
+    String facial = facialValue.split('.').last;
+
+    String skinTreatmentValue = _skinTreatmentEnum.toString();
+    String skinTreatment = skinTreatmentValue.split('.').last;
+
+    String extensionsValue = _extensionsEnum.toString();
+    String extension = extensionsValue.split('.').last;
+
+    String package1Value = _pakage1Enum.toString();
+    String package1 = package1Value.split('.').last;
+
+    String package2Value = _pakage2Enum.toString();
+    String package2 = package2Value.split('.').last;
+
+    String serviceValue = _serviceEnum.toString();
+    String service = serviceValue.split('.').last;
+
+    String genderValue = _genderEnum.toString();
+    String gender = genderValue.split('.').last;
+
+    // getting controller values
+    String bookieName = nameController.text.toString();
+    String bookieEmail = emailController.text.toString();
+    String bookieContactNo = contactNoController.text.toString();
+    String bookieAdress = adressController.text.toString();
+
+    // Creating request
+    Backend backend = Backend();
+    String backendMeta = backend.backendServerMeta;
+    final String bookingUrl = "$backendMeta/api/book_parlor";
+    try {
+      var response = await http.post(Uri.parse(bookingUrl), body: {
+        // username
+        'username': widget.username,
+        'parlorID': widget.parlorPrimaryKey,
+        'bookieName': bookieName,
+        'bookieEmail': bookieEmail,
+        'bookieContactNo': bookieContactNo,
+        'bokieAdress': bookieAdress,
+        'gender': gender,
+
+        //parlor details
+        'parlorName':widget.parlorName,
+        'hairCut': hairCut,
+        'hairTreatment': hairTreatment,
+        'facial': facial,
+        'skinTreatment': skinTreatment,
+        'extension': extension,
+        'package1': package1,
+        'package2': package2,
+        'service': service
+      });
+      var jsonResponse = jsonDecode(response.body);
+      if (Platform.isAndroid) {
+        Fluttertoast.showToast(
+          msg: jsonResponse['success'],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.grey[700],
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+      } else if (Platform.isWindows) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(jsonResponse['success']),
+        ));
+      }
+    } catch (e) {
+      if (Platform.isAndroid) {
+        Fluttertoast.showToast(
+          msg: "Please check your network connection and Try again!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.grey[700],
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+      } else if (Platform.isWindows) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Please check your network connection and Try again!"),
+        ));
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.lightGreen,
@@ -49,9 +162,8 @@ class _BookingPageState extends State<BookingPage> {
             Navigator.pop(context);
           },
         ),
-        title: Text("Beauty World Parlour"),
+        title: Text(widget.parlorName+" Parlor"),
         actions: [
-          
           IconButton(
             icon: Icon(Icons.call),
             onPressed: () {},
@@ -485,6 +597,7 @@ class _BookingPageState extends State<BookingPage> {
             ),
             Padding(padding: EdgeInsets.all(10.0)),
             TextFormField(
+              controller: nameController,
               decoration: InputDecoration(
                 labelText: 'Name',
                 prefixIcon: Icon(Icons.verified_user_outlined),
@@ -493,6 +606,7 @@ class _BookingPageState extends State<BookingPage> {
             ),
             Padding(padding: EdgeInsets.all(10.0)),
             TextFormField(
+              controller: emailController,
               decoration: InputDecoration(
                 labelText: 'Email',
                 prefixIcon: Icon(Icons.verified_user_outlined),
@@ -501,6 +615,7 @@ class _BookingPageState extends State<BookingPage> {
             ),
             Padding(padding: EdgeInsets.all(10.0)),
             TextFormField(
+              controller: contactNoController,
               decoration: InputDecoration(
                 labelText: 'Number',
                 prefixIcon: Icon(Icons.verified_user_outlined),
@@ -509,6 +624,7 @@ class _BookingPageState extends State<BookingPage> {
             ),
             Padding(padding: EdgeInsets.all(10.0)),
             TextFormField(
+              controller: adressController,
               decoration: InputDecoration(
                 labelText: 'Address',
                 prefixIcon: Icon(Icons.verified_user_outlined),
@@ -530,7 +646,7 @@ class _BookingPageState extends State<BookingPage> {
                   backgroundColor: Color(0xff4c505b),
                   child: IconButton(
                       color: Colors.white,
-                      onPressed: () {},
+                      onPressed: getBookingDetails,
                       iconSize: 18,
                       icon: Icon(Icons.arrow_forward)),
                 )

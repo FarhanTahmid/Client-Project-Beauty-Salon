@@ -3,10 +3,18 @@ import 'package:beauty_salon/pages/parlour.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatelessWidget {
-  
+class HomePage extends StatefulWidget {
+  final String username;
+  const HomePage({super.key, required this.username});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.pinkAccent,
@@ -14,23 +22,29 @@ class HomePage extends StatelessWidget {
 
         title: Text("Beauty Salon App"),
         actions: [
-          IconButton(icon: Icon(Icons.ballot), onPressed: () {},),
-          IconButton(icon: Icon(Icons.search), onPressed: () {},),
-          IconButton(icon: Icon(Icons.bookmark_add), onPressed: () {},),
+          IconButton(
+            icon: Icon(Icons.ballot),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: Icon(Icons.bookmark_add),
+            onPressed: () {},
+          ),
         ],
-
       ),
-      
-      body: Container( 
-        decoration: BoxDecoration(image: DecorationImage(image: AssetImage(
-          ('assets/images/8.png'), ),
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(
+              ('assets/images/8.png'),
+            ),
+          ),
         ),
-        ),
-        
-        
-        ),
-        
-      
+      ),
       drawer: Drawer(
         child: Container(
           color: Colors.pinkAccent,
@@ -45,14 +59,14 @@ class HomePage extends StatelessWidget {
                   accountName: Text(" Beauty Salon"),
                   accountEmail: Text("beauty.salon@gmail.com"),
                   currentAccountPicture: CircleAvatar(
-                    backgroundImage:AssetImage( ('assets/images/22.jpg'),),
+                    backgroundImage: AssetImage(
+                      ('assets/images/22.jpg'),
+                    ),
                   ),
                 ),
               ),
               ListTile(
-                onTap: () {
-                  
-                },
+                onTap: () {},
                 leading: Icon(
                   CupertinoIcons.home,
                   color: Colors.white,
@@ -66,9 +80,7 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               ListTile(
-                onTap: () {
-                  
-                },
+                onTap: () {},
                 leading: Icon(
                   CupertinoIcons.profile_circled,
                   color: Colors.white,
@@ -82,9 +94,7 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               ListTile(
-                onTap: () {
-                  
-                },
+                onTap: () {},
                 leading: Icon(
                   CupertinoIcons.mail,
                   color: Colors.white,
@@ -99,10 +109,10 @@ class HomePage extends StatelessWidget {
               ),
               ListTile(
                 onTap: () {
-                 Navigator.push(context,MaterialPageRoute(
-                    builder: (context) => Parlour()),
-                );
-                  
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Parlour(username: widget.username,)),
+                  );
                 },
                 leading: Icon(
                   CupertinoIcons.add_circled_solid,

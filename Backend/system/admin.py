@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import RegisterUser,BeautySalons
+from .models import RegisterUser,BeautySalons,GetBookingDetails
 
 # Register your models here.
 
@@ -17,4 +17,15 @@ class BeautySalons(admin.ModelAdmin):
     list_display=[
         'parlorName',
         'contact_no'
+    ]
+@admin.register(GetBookingDetails)
+class BookingDetails(admin.ModelAdmin):
+    list_display=[
+        'bookieUsername',
+        'bookieName',
+        'bookieEmail',
+        'parlor',
+        'gender'
+        
+        
     ]
