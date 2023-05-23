@@ -38,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
       if (response.statusCode == 202) {
         var jsonResponse = jsonDecode(response.body);
         username = jsonResponse['username'];
-        createLoginCredentialFile(username);
+        
         if (Platform.isAndroid) {
           Fluttertoast.showToast(
             msg: "User Loggedin Successfully",
@@ -79,6 +79,7 @@ class _LoginPageState extends State<LoginPage> {
         }
       }
     } catch (e) {
+      print(e);
       if (Platform.isAndroid) {
         Fluttertoast.showToast(
           msg: "Please check your network connection and Try again!",
