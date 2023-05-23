@@ -36,32 +36,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void logout() {
-    File file = File('login.txt');
-    if (file.existsSync()) {
-      file.deleteSync();
-      if (Platform.isAndroid) {
-          Fluttertoast.showToast(
-            msg: "Logout Successful",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.grey[700],
-            textColor: Colors.white,
-            fontSize: 16.0,
-          );
-        } else if (Platform.isWindows) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text("User Logged out Successfully"),
-          ));
-        }
-       Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => LoginPage()),
-          ); 
-    }
-  }
-
   @override
   void initState() {
     super.initState();
@@ -184,7 +158,12 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               ListTile(
-                onTap: logout,
+                onTap: (){
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                  ); 
+                },
                 title: Text(
                   "Logout",
                   textScaleFactor: 1.2,
