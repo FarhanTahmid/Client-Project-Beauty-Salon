@@ -1,5 +1,5 @@
 import 'dart:ui';
-
+import 'package:beauty_salon/pages/parlour.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -99,7 +99,9 @@ class HomePage extends StatelessWidget {
               ),
               ListTile(
                 onTap: () {
-                  Navigator.pushNamed(context, 'parlour');
+                 Navigator.push(context,MaterialPageRoute(
+                    builder: (context) => Parlour()),
+                );
                   
                 },
                 leading: Icon(

@@ -22,9 +22,6 @@ class _LoginPageState extends State<LoginPage> {
     String backendMeta = backend.backendServerMeta;
     final String loginUrl = "$backendMeta/api/login";
 
-    print(usernameController.text.trim());
-    print(passwordController.text.trim());
-
     try {
       var response = await http.post(Uri.parse(loginUrl), body: {
         'username': usernameController.text.trim(),

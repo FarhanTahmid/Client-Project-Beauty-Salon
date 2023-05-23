@@ -1,3 +1,4 @@
+import 'package:beauty_salon/pages/home_page.dart';
 import 'package:beauty_salon/pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:beauty_salon/pages/register.dart';
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       routes: {
-        "/": (context) => LoginPage(),
+        "/": (context) => HomePage(),
       },
     );
   }

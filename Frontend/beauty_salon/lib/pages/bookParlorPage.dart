@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 
 enum HairCutEnum { LairCut, BobCut, FrenchCut }
@@ -20,14 +18,15 @@ enum ServiceEnum { HomeService, InPersonService }
 
 enum GenderEnum { Male, Female }
 
-class Queens extends StatefulWidget {
-  const Queens({super.key});
+class BookingPage extends StatefulWidget {
+  final String parlorPrimaryKey;
+  const BookingPage({super.key, required this.parlorPrimaryKey});
 
   @override
-  State<Queens> createState() => _QueensState();
+  State<BookingPage> createState() => _BookingPageState();
 }
 
-class _QueensState extends State<Queens> {
+class _BookingPageState extends State<BookingPage> {
   HairCutEnum? _hairCutEnum;
   HairTreatmentEnum? _hairTreatmentEnum;
   FacialEnum? _facialEnum;
@@ -38,25 +37,21 @@ class _QueensState extends State<Queens> {
   ServiceEnum? _serviceEnum;
   GenderEnum? _genderEnum;
 
-  void getBookingDetails() {
-    // Getting values extracted from the enums
-    
-    String hairCutValue = _hairCutEnum.toString();
-    String hairCut = hairCutValue.split('.').last;
-    
-  }
-
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.lightGreen,
         leading: IconButton(
-          icon: Icon(Icons.layers_rounded),
-          onPressed: () {},
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
-        title: Text("Queens Beauty Parlour"),
+        title: Text("Beauty World Parlour"),
         actions: [
+          
           IconButton(
             icon: Icon(Icons.call),
             onPressed: () {},
@@ -535,7 +530,7 @@ class _QueensState extends State<Queens> {
                   backgroundColor: Color(0xff4c505b),
                   child: IconButton(
                       color: Colors.white,
-                      onPressed: getBookingDetails,
+                      onPressed: () {},
                       iconSize: 18,
                       icon: Icon(Icons.arrow_forward)),
                 )

@@ -227,12 +227,23 @@ class _MyRegisterState extends State<MyRegister> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                'Sign Up',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 27,
-                                    fontWeight: FontWeight.w700),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => LoginPage()),
+                                  );
+                                },
+                                child: Text(
+                                  "Already have an account? Login!",
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                      
+                                      color: Colors.white,
+                                      fontSize: 18),
+                                ),
+                                style: ButtonStyle(),
                               ),
                               CircleAvatar(
                                 radius: 30,
