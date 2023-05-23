@@ -1,13 +1,16 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:beauty_salon/backend.dart';
 import 'package:beauty_salon/pages/parlour.dart';
+import 'package:beauty_salon/pages/login_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   final String username;
-  const HomePage({super.key, required this.username});
+  const HomePage({Key? key, required this.username}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -16,6 +19,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   String name = '';
   String email = '';
+
   Future<void> getUserDetails() async {
     var response;
     String username = widget.username;
@@ -25,14 +29,47 @@ class _HomePageState extends State<HomePage> {
     response = await http.get(getUserUrl);
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
-      name = jsonResponse['name'];
-      email = jsonResponse['email'];
+      setState(() {
+        name = jsonResponse['name'];
+        email = jsonResponse['email'];
+      });
+    }
+  }
+
+  void logout() {
+    File file = File('login.txt');
+    if (file.existsSync()) {
+      file.deleteSync();
+      if (Platform.isAndroid) {
+          Fluttertoast.showToast(
+            msg: "Logout Successful",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.grey[700],
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );
+        } else if (Platform.isWindows) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("User Logged out Successfully"),
+          ));
+        }
+       Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => LoginPage()),
+          ); 
     }
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     getUserDetails();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.pinkAccent,
@@ -57,9 +94,7 @@ class _HomePageState extends State<HomePage> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(
-              ('assets/images/8.png'),
-            ),
+            image: AssetImage('assets/images/8.png'),
           ),
         ),
       ),
@@ -77,9 +112,7 @@ class _HomePageState extends State<HomePage> {
                   accountName: Text(name),
                   accountEmail: Text(email),
                   currentAccountPicture: CircleAvatar(
-                    backgroundImage: AssetImage(
-                      ('assets/images/22.jpg'),
-                    ),
+                    backgroundImage: AssetImage('assets/images/22.jpg'),
                   ),
                 ),
               ),
@@ -132,9 +165,10 @@ class _HomePageState extends State<HomePage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => Parlour(
-                              username: widget.username,
-                            )),
+                      builder: (context) => Parlour(
+                        username: widget.username,
+                      ),
+                    ),
                   );
                 },
                 leading: Icon(
@@ -150,7 +184,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               ListTile(
-                onTap: () {},
+                onTap: logout,
                 title: Text(
                   "Logout",
                   textScaleFactor: 1.2,

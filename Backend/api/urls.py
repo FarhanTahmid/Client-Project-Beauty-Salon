@@ -1,5 +1,5 @@
 from django.urls import path
-from api.views import RegisterUsers,Login,Salons,BookingRegistration,GetUserDetails
+from api.views import RegisterUsers,Login,Salons,BookingRegistration,GetUserDetails,CurrentUser
 
 
 app_name='api'
@@ -9,5 +9,6 @@ urlpatterns = [
     path('login',Login.as_view(),name='login'),
     path('user_details/<str:username>', GetUserDetails.as_view(), name=""),
     path('beautysalons',Salons.as_view(),name="beauty_salons"),
-    path('book_parlor',BookingRegistration.as_view(),name="booking")
+    path('book_parlor',BookingRegistration.as_view(),name="booking"),
+    path('user_auth',CurrentUser.as_view(),name='current_user'),
 ]

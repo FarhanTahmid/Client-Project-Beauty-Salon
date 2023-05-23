@@ -52,7 +52,13 @@ class GetUserDetails(APIView):
         userDetails=RegisterUser.objects.get(username=username)
         return Response({'success':"Getting User data",'name':userDetails.name,
                          'email':userDetails.email},status=status.HTTP_200_OK)
-
+class CurrentUser(APIView):
+    def get(self,request):
+        user=request.user
+        if request.user.is_authenticated:
+            return Response({'success': 'Got logged in User','username':user.username}, status=status.HTTP_202_ACCEPTED)
+        else:
+            return Response({'error': 'No user'}, status=status.HTTP_401_UNAUTHORIZED)
 class Salons(APIView):
     def get(self,request):
         parlorNameDict={}

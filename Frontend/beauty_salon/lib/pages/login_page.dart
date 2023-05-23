@@ -18,6 +18,13 @@ class _LoginPageState extends State<LoginPage> {
   final passwordController = TextEditingController();
   String username = '';
 
+  void createLoginCredentialFile(String user) {
+    File file = File('login.txt');
+    file.createSync();
+    String content = user;
+    file.writeAsStringSync(content);
+  }
+
   void login() async {
     Backend backend = Backend();
     String backendMeta = backend.backendServerMeta;
@@ -31,6 +38,7 @@ class _LoginPageState extends State<LoginPage> {
       if (response.statusCode == 202) {
         var jsonResponse = jsonDecode(response.body);
         username = jsonResponse['username'];
+        createLoginCredentialFile(username);
         if (Platform.isAndroid) {
           Fluttertoast.showToast(
             msg: "User Loggedin Successfully",
@@ -48,7 +56,10 @@ class _LoginPageState extends State<LoginPage> {
         }
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => HomePage(username: username,)),
+          MaterialPageRoute(
+              builder: (context) => HomePage(
+                    username: username,
+                  )),
         );
       } else if (response.statusCode == 401) {
         if (Platform.isAndroid) {
