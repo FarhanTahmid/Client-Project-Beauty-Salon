@@ -1,20 +1,89 @@
-import 'dart:html';
-
+import 'package:beauty_salon/backend.dart';
+import 'package:beauty_salon/pages/register.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:beauty_salon/pages/home_page.dart';
+import 'package:http/http.dart' as http;
+import 'dart:io';
 
 class LoginPage extends StatefulWidget {
   //const LoginPage({super.key});
 
-  
- 
-
   @override
   State<LoginPage> createState() => _LoginPageState();
- 
 }
 
 class _LoginPageState extends State<LoginPage> {
-   Widget build(BuildContext context) {
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  void login() async {
+    Backend backend = Backend();
+    String backendMeta = backend.backendServerMeta;
+    final String loginUrl = "$backendMeta/api/login";
+
+    try {
+      var response = await http.post(Uri.parse(loginUrl), body: {
+        'username': usernameController.text.trim(),
+        'password': passwordController.text.trim()
+      });
+      if (response.statusCode == 202) {
+        if (Platform.isAndroid) {
+          Fluttertoast.showToast(
+            msg: "User Loggedin Successfully",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.grey[700],
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );
+        } else if (Platform.isWindows) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("User Loggedin Successfully"),
+          ));
+        }
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),
+        );
+      } else if (response.statusCode == 401) {
+        if (Platform.isAndroid) {
+          Fluttertoast.showToast(
+            msg: "Wrong Credentials! Try again.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.grey[700],
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );
+        } else if (Platform.isWindows) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("Wrong Credentials! Try again."),
+          ));
+        }
+      }
+    } catch (e) {
+      if (Platform.isAndroid) {
+        Fluttertoast.showToast(
+          msg: "Please check your network connection and Try again!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.grey[700],
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+      } else if (Platform.isWindows) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("This username already exists! Try logging in"),
+        ));
+      }
+    }
+  }
+
+  Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
@@ -44,11 +113,12 @@ class _LoginPageState extends State<LoginPage> {
                       child: Column(
                         children: [
                           TextField(
+                            controller: usernameController,
                             style: TextStyle(color: Colors.black),
                             decoration: InputDecoration(
                                 fillColor: Colors.grey.shade100,
                                 filled: true,
-                                hintText: "Email",
+                                hintText: "Username",
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
                                 )),
@@ -57,6 +127,7 @@ class _LoginPageState extends State<LoginPage> {
                             height: 30,
                           ),
                           TextField(
+                            controller: passwordController,
                             style: TextStyle(),
                             obscureText: true,
                             decoration: InputDecoration(
@@ -83,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
                                 backgroundColor: Colors.black,
                                 child: IconButton(
                                     color: Colors.white,
-                                    onPressed: () async {},
+                                    onPressed: login,
                                     icon: Icon(
                                       Icons.arrow_forward,
                                     )),
@@ -98,7 +169,11 @@ class _LoginPageState extends State<LoginPage> {
                             children: [
                               TextButton(
                                 onPressed: () {
-                                  Navigator.pushNamed(context, 'register');
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => MyRegister()),
+                                  );
                                 },
                                 child: Text(
                                   'Sign up',
@@ -134,7 +209,4 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-              
-                            
-                           
 }

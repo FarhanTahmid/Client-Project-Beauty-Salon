@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 enum HairCutEnum{LairCut, BobCut, FrenchCut }
 enum HairTreatmentEnum{MoistureTreatment, HotOilTreatment, ReluxTreatment }

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:beauty_salon/backend.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-
+import 'dart:io';
 
 class MyRegister extends StatefulWidget {
   const MyRegister({Key? key}) : super(key: key);
@@ -20,56 +20,73 @@ class _MyRegisterState extends State<MyRegister> {
   final passwordController = TextEditingController();
 
   void signup() async {
-  //   Backend backend = Backend();
-  //   String backendMeta = backend.backendServerMeta;
-  //   final String signupUrl = "$backendMeta/api/signup";
+      Backend backend = Backend();
+      String backendMeta = backend.backendServerMeta;
+      final String signupUrl = "$backendMeta/api/signup";
 
-  //   try {
-  //     var response = await http.post(Uri.parse(signupUrl), body: {
-  //       'username': usernameController.text.trim(),
-  //       'name': nameController.text.trim(),
-  //       'password': passwordController.text.trim(),
-  //       'email': emailController.text.trim()
-  //     });
-  //     if ((response.statusCode) == 400) {
-  //       Fluttertoast.showToast(
-  //         msg: "This username already exists! Try logging in",
-  //         toastLength: Toast.LENGTH_SHORT,
-  //         gravity: ToastGravity.BOTTOM,
-  //         timeInSecForIosWeb: 1,
-  //         backgroundColor: Colors.grey[700],
-  //         textColor: Colors.white,
-  //         fontSize: 16.0,
-  //       );
-        
-  //     }
-  //     else if ((response.statusCode) == 201) {
-        
-  //       Fluttertoast.showToast(
-  //         msg: "Signed up successfully",
-  //         toastLength: Toast.LENGTH_SHORT,
-  //         gravity: ToastGravity.BOTTOM,
-  //         timeInSecForIosWeb: 1,
-  //         backgroundColor: Colors.grey[700],
-  //         textColor: Colors.white,
-  //         fontSize: 16.0,
-  //       );
-  //       Navigator.push(
-  //         context,
-  //         MaterialPageRoute(builder: (context) => LoginPage()),
-  //       );
-  //     }
-  //   } catch (e) {
-  //     Fluttertoast.showToast(
-  //         msg: "Please check your network connection and Try again!",
-  //         toastLength: Toast.LENGTH_SHORT,
-  //         gravity: ToastGravity.BOTTOM,
-  //         timeInSecForIosWeb: 1,
-  //         backgroundColor: Colors.grey[700],
-  //         textColor: Colors.white,
-  //         fontSize: 16.0,
-  //       );
-  //   }
+      try {
+        var response = await http.post(Uri.parse(signupUrl), body: {
+          'username': usernameController.text.trim(),
+          'name': nameController.text.trim(),
+          'password': passwordController.text.trim(),
+          'email': emailController.text.trim()
+        });
+        if ((response.statusCode) == 400) {
+          if(Platform.isAndroid){
+          Fluttertoast.showToast(
+            msg: "This username already exists! Try logging in",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.grey[700],
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );}
+          else if(Platform.isWindows){
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text("This username already exists! Try logging in"),
+            ));
+          }
+
+        }
+        else if ((response.statusCode) == 201) {
+          if(Platform.isAndroid){
+          Fluttertoast.showToast(
+            msg: "Signed up successfully",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.grey[700],
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );}
+          else if(Platform.isWindows){
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text("Signed up successfully"),
+            ));
+          }
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => LoginPage()),
+          );
+        }
+      } catch (e) {
+        if(Platform.isAndroid){
+        Fluttertoast.showToast(
+            msg: "Please check your network connection and Try again!",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.grey[700],
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );}
+          else if(Platform.isWindows){
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text("Please check your network connection and Try again!"),
+            ));
+          }
+      }
   }
 
   @override
@@ -210,12 +227,23 @@ class _MyRegisterState extends State<MyRegister> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                'Sign Up',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 27,
-                                    fontWeight: FontWeight.w700),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => LoginPage()),
+                                  );
+                                },
+                                child: Text(
+                                  "Already have an account? Login!",
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                      
+                                      color: Colors.white,
+                                      fontSize: 18),
+                                ),
+                                style: ButtonStyle(),
                               ),
                               CircleAvatar(
                                 radius: 30,

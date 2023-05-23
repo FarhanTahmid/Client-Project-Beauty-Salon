@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import RegisterUser
+from .models import RegisterUser,BeautySalons
 
 # Register your models here.
 
@@ -10,4 +10,11 @@ class RegisterUser(admin.ModelAdmin):
         'username',
         'name',
         'email',
+    ]
+
+@admin.register(BeautySalons)
+class BeautySalons(admin.ModelAdmin):
+    list_display=[
+        'parlorName',
+        'contact_no'
     ]

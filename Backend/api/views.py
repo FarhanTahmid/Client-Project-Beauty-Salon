@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import User,auth
-from system.models import RegisterUser
+from system.models import RegisterUser,BeautySalons
 from django.contrib.auth.hashers import make_password
 
 # Create your views here.
@@ -46,3 +46,15 @@ class Login(APIView):
             return Response({'success': 'Logged in successfully','username':username}, status=status.HTTP_202_ACCEPTED)
         else:
             return Response({'error': 'Login unsuccessful'}, status=status.HTTP_401_UNAUTHORIZED)
+
+class Salons(APIView):
+    def get(self,request):
+        parlorNameDict={}
+        parlorMottoDict={}
+        parlorContactNoDict={}
+        salonDetails=BeautySalons.objects.all()
+        for salon in salonDetails:
+            parlorNameDict.update({salon.pk:salon.parlorName})
+            parlorMottoDict.update({salon.pk:salon.motto})
+            parlorContactNoDict.update({salon.pk:salon.contact_no})
+        return Response({'success':"Getting Beaut Salons",'name':parlorNameDict,'motto':parlorMottoDict,'contact':parlorContactNoDict},status=status.HTTP_200_OK)

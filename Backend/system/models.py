@@ -12,3 +12,15 @@ class RegisterUser(models.Model):
     def __str__(self) -> str:
         return self.username
 
+class BeautySalons(models.Model):
+    parlorName=models.CharField(max_length=50,null=False,blank=False)
+    motto=models.CharField(max_length=50,null=True,blank=True)
+    contact_no=models.CharField(max_length=50,null=True,blank=True)
+    
+    class Meta:
+        verbose_name="Registered Salons"
+        
+    def __str__(self):
+        return self.parlorName
+    
+
