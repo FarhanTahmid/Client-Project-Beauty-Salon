@@ -236,7 +236,7 @@ class _MyRegisterState extends State<MyRegister> {
                                   );
                                 },
                                 child: Text(
-                                  "Already have an account? Login!",
+                                  "Have an account? Login!",
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                       
